@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping("auth")
 @RequiredArgsConstructor
 @Tag(name = "Authentication")
 public class AuthenticationController {
@@ -39,5 +39,11 @@ public class AuthenticationController {
     public void confirm(
             @RequestParam String token) throws MessagingException {
         service.activateAccount(token);
+    }
+
+    // test
+    @GetMapping("/test")
+    public String test() {
+        return "test";
     }
 }

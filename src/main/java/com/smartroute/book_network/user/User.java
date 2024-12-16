@@ -13,6 +13,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -50,9 +53,11 @@ public class User implements UserDetails, Principal {
     @ManyToMany(fetch = EAGER)
     private List<Role> roles;
     @CreatedDate
+    @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdDate;
     @LastModifiedDate
+    @UpdateTimestamp
     @Column(insertable = false)
     private LocalDateTime lastModifiedDate;
 
