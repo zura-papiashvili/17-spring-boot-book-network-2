@@ -1,5 +1,7 @@
 package com.smartroute.book_network.user;
 
+import com.smartroute.book_network.book.Book;
+import com.smartroute.book_network.history.BookTransactionHistory;
 import com.smartroute.book_network.role.Role;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -7,6 +9,7 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,8 +17,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -42,22 +43,32 @@ public class User implements UserDetails, Principal {
     @Id
     @GeneratedValue
     private Integer id;
+
     private String firstname;
     private String lastname;
     private LocalDate dateOfBirth;
+
     @Column(unique = true)
     private String email;
+
     private String password;
     private boolean accountLocked;
     private boolean enabled;
+
     @ManyToMany(fetch = EAGER)
     private List<Role> roles;
+
+    @OneToMany(mappedBy = "owner")
+    private List<Book> books;
+
+    @OneToMany(mappedBy = "user")
+    private List<BookTransactionHistory> bookTransactionHistories;
+
     @CreatedDate
-    @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdDate;
+
     @LastModifiedDate
-    @UpdateTimestamp
     @Column(insertable = false)
     private LocalDateTime lastModifiedDate;
 
