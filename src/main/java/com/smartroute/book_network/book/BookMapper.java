@@ -2,6 +2,7 @@ package com.smartroute.book_network.book;
 
 import org.springframework.stereotype.Service;
 
+import com.smartroute.book_network.file.FileUtils;
 import com.smartroute.book_network.history.BookTransactionHistory;
 
 @Service
@@ -30,7 +31,7 @@ public class BookMapper {
                 .archived(book.isArchived())
                 .shareable(book.isShareable())
                 .owner(book.getOwner().getUsername())
-                // .cover(book.getCover())
+                .cover(FileUtils.readFileFromLocation(book.getBookCover()))
                 .build();
     }
 
