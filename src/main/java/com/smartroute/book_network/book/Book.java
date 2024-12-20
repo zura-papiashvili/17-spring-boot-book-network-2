@@ -1,5 +1,6 @@
 package com.smartroute.book_network.book;
 
+import java.beans.Transient;
 import java.util.List;
 
 import com.smartroute.book_network.common.BaseEntity;
@@ -53,5 +54,17 @@ public class Book extends BaseEntity {
 
     @OneToMany(mappedBy = "book")
     private List<BookTransactionHistory> bookTransactionHistories;
+
+    @Transient
+    public double getRate() {
+        if (feedbacks == null || feedbacks.isEmpty()) {
+            return 0;
+        }
+        var rate = this.feedbacks.stream().mapToDouble(Feedback::getNote).average().orElse(0.0);
+
+        double rateRounded = Math.round(rate * 10.0) / 10.0;
+
+        return rateRounded;
+    }
 
 }
