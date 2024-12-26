@@ -32,7 +32,7 @@ public class BookService {
 
     public Integer save(BookRequest request, Authentication connectedUser) {
         User user = ((User) connectedUser.getPrincipal());
-        Book existingBook = bookRepository.findById(request.id()).orElse(null);
+        Book existingBook = request.id() != null ? bookRepository.findById(request.id()).orElse(null) : null;
         Book book = bookMapper.toBook(request);
         book.setOwner(user);
         if (existingBook != null && book.getBookCover() == null) {
