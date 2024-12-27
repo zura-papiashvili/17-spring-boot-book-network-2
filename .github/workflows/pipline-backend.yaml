@@ -1,0 +1,85 @@
+name: BSN Backend API Pipeline
+
+on:
+  push:
+    branches:
+      - ci/Pipeline
+    paths:
+      - .github/workflows/*-backend.yaml
+      - src/main/java/com/bsn/bsn/api/**
+      - src/main/resources/**
+      - Dockerfile
+      - "docker-compose.yaml"
+jobs:
+  compile:
+    runs-on: ubuntu
+    name: Compile project
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: "corretto"
+          java-version: "17"
+
+      - name: Compile project
+        run: |
+          ./mvnw clean compile
+
+  unit-test:
+    runs-on: ubuntu
+    name: Run unit tests
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: "corretto"
+          java-version: "17"
+
+      - name: Run unit tests
+        run: |
+          ./mvnw clean test
+  build:
+    runs-on: ubuntu
+    name: Build project
+    needs: [compile, unit-test]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: "corretto"
+          java-version: "17"
+
+      - name: Build project
+        run: |
+          ./mvnw clean package
+
+  build-image:
+    runs-on: ubuntu
+    name: Build Docker image
+    needs: [build]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: "corretto"
+          java-version: "17"
+      - name: Extract projevt version
+        id: extract_version
+        run: |
+          echo "VERSION=$(./mvnw -q -Dexec.executable='echo' -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_OUTPUT

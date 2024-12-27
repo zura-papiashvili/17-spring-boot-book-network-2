@@ -24,7 +24,7 @@ services:
 
   bsn-api:
     container_name: bsn-api
-    image: bsn/bsn:1.0.3
+    image: bsn/bsn:1.0.0
     ports:
       - 8088:8088
     networks:
