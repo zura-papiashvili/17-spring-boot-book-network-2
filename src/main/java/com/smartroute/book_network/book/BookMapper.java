@@ -3,7 +3,6 @@ package com.smartroute.book_network.book;
 import org.springframework.stereotype.Service;
 
 import com.smartroute.book_network.aws.StorageService;
-import com.smartroute.book_network.file.FileUtils;
 import com.smartroute.book_network.history.BookTransactionHistory;
 
 import lombok.AllArgsConstructor;

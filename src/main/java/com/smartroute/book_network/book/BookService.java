@@ -15,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.smartroute.book_network.aws.StorageService;
 import com.smartroute.book_network.common.PageResponse;
 import com.smartroute.book_network.exception.OperationNotPermittedException;
-import com.smartroute.book_network.file.FileStorageService;
 import com.smartroute.book_network.history.BookTransactionHistory;
 import com.smartroute.book_network.history.BookTransactionHistoryRepository;
 import com.smartroute.book_network.user.User;
