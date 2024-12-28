@@ -2,11 +2,17 @@ package com.smartroute.book_network.book;
 
 import org.springframework.stereotype.Service;
 
+import com.smartroute.book_network.aws.StorageService;
 import com.smartroute.book_network.file.FileUtils;
 import com.smartroute.book_network.history.BookTransactionHistory;
 
+import lombok.AllArgsConstructor;
+
 @Service
+@AllArgsConstructor
 public class BookMapper {
+
+    private final StorageService storageService;
 
     public Book toBook(BookRequest request) {
         return Book.builder()
@@ -31,7 +37,7 @@ public class BookMapper {
                 .archived(book.isArchived())
                 .shareable(book.isShareable())
                 .owner(book.getOwner().getUsername())
-                .cover(FileUtils.readFileFromLocation(book.getBookCover()))
+                .cover(storageService.downloadFile(book.getBookCover()))
                 .build();
     }
 

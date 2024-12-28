@@ -47,6 +47,8 @@ application:
   file:
     upload:
       photos-output-path: ./uploads
+  bucket:
+    name: ${AWS_S3_BUCKET_NAME}
 server:
   port: ${SERVER_PORT}
 

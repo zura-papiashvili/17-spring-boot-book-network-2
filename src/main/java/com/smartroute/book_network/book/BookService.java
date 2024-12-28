@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.smartroute.book_network.aws.StorageService;
 import com.smartroute.book_network.common.PageResponse;
 import com.smartroute.book_network.exception.OperationNotPermittedException;
 import com.smartroute.book_network.file.FileStorageService;
@@ -28,7 +29,7 @@ public class BookService {
     private final BookMapper bookMapper;
     private final BookRepository bookRepository;
     private final BookTransactionHistoryRepository bookTransactionHistoryRepository;
-    private final FileStorageService fileStorageService;
+    private final StorageService storageService;
 
     public Integer save(BookRequest request, Authentication connectedUser) {
         User user = ((User) connectedUser.getPrincipal());
@@ -223,7 +224,7 @@ public class BookService {
         if (!book.getOwner().getId().equals(user.getId())) {
             throw new OperationNotPermittedException("You are not the owner of this book");
         }
-        var bookCover = fileStorageService.saveFile(file, user.getId());
+        String bookCover = storageService.uploadFile(file);
         book.setBookCover(bookCover);
         bookRepository.save(book);
     }
